@@ -1,8 +1,5 @@
-# docx-conversion
-
 Okay, here's a comprehensive `README.md` file for the project, incorporating the details from your provided code, Dockerfile, and docker-compose file:
 
-```markdown
 # FastAPI File Conversion API
 
 This project provides a REST API built with FastAPI for converting various document formats, such as DOCX to HTML, DOCX to PDF, PDF to DOCX, and PDF to HTML. It leverages LibreOffice for document conversions and uses Redis for logging. Additionally, it includes an implementation of Spire.Doc for DOCX to HTML conversion.
@@ -42,7 +39,7 @@ cd docx-conversion
 
    *   Navigate to the root of the project where `docker-compose.yml` file is located.
     ```bash
-    docker-compose up -d --build
+   sudo  docker-compose up -d --build
     ```
      This command builds the Docker image and starts the service in detached mode. This will download Ubuntu 22.04 image, install all dependencies and run the program.
 
@@ -139,33 +136,33 @@ The application uses the following python packages
 You can test the API using `curl` commands or any HTTP client like Postman. Below are some examples:
 
 ### Uploading DOCX and converting to HTML
-   ```bash
-    curl -X POST -F "file=@path/to/your/document.docx" http://0.0.0.0:7002/api/v1/convert/docx2html/
-   ```
+```bash
+curl -X POST -F "file=@path/to/your/document.docx" http://0.0.0.0:7002/api/v1/convert/docx2html/
+```
 
 ### Uploading DOCX and converting to PDF
-    ```bash
-    curl -X POST -F "file=@path/to/your/document.docx" http://0.0.0.0:7002/api/v1/convert/docx2pdf/
-   ```
+```bash
+curl -X POST -F "file=@path/to/your/document.docx" http://0.0.0.0:7002/api/v1/convert/docx2pdf/
+```
 
 ### Uploading PDF and converting to DOCX
-    ```bash
-    curl -X POST -F "file=@path/to/your/document.pdf" http://0.0.0.0:7002/api/v1/convert/pdf2docx/
-    ```
+```bash
+curl -X POST -F "file=@path/to/your/document.pdf" http://0.0.0.0:7002/api/v1/convert/pdf2docx/
+```
 
 ### Uploading PDF and converting to HTML
-    ```bash
-    curl -X POST -F "file=@path/to/your/document.pdf" http://0.0.0.0:7002/api/v1/convert/pdf2html/
-    ```
+```bash
+curl -X POST -F "file=@path/to/your/document.pdf" http://0.0.0.0:7002/api/v1/convert/pdf2html/
+```
 
 ### Uploading DOCX and converting to HTML with Spire.Doc
-    ```bash
-    curl -X POST -F "file=@path/to/your/document.docx" http://0.0.0.0:7002/api/v2/convert/upload-docx/
-    ```
+```bash
+curl -X POST -F "file=@path/to/your/document.docx" http://0.0.0.0:7002/api/v2/convert/upload-docx/
+```
 ### Fetching Logs:
-    ```bash
-    curl http://0.0.0.0:7002/logs
-    ```
+```bash
+curl http://0.0.0.0:7002/logs
+```
 ## Contributing
 
 Contributions are welcome! Please fork the repository and submit a pull request with your changes.
@@ -174,7 +171,6 @@ Contributions are welcome! Please fork the repository and submit a pull request 
 
 This project is licensed under the Okram Jimmy License.
 
-```
 
 **Key Points in this README:**
 
