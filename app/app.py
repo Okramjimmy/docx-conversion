@@ -8,7 +8,9 @@ from fastapi import FastAPI, File, UploadFile, HTTPException, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from starlette.requests import Request
-
+from spire.doc import *
+from spire.doc.common import *
+import re
 # Set up Redis client (use redis.Redis instead of redis.StrictRedis)
 redis_client = redis.Redis(host="172.16.117.47", port=6379, db=0, decode_responses=True, socket_timeout=30)  # Docker Redis service
 
@@ -340,9 +342,8 @@ convert_router_v2 = APIRouter(prefix="/api/v2/convert", tags=["convert-v2"])
 @convert_router_v2.get("/")
 async def root_v2():
     logging.debug("Base route for v2 accessed.")
-    return {"message": "Welcome to the FastAPI file upload and conversion service! (v2)"}
+    return {"message": "Welcome to the Conversion file upload and conversion service! (v2)"}
 
-# File upload route under /api/v2/convert/upload-docx/
 @convert_router_v2.post("/docx2html/")
 async def upload_docx_v2(file: UploadFile = File(...)):
     logging.debug("Received file upload request for v2.")
@@ -368,10 +369,6 @@ async def upload_docx_v2(file: UploadFile = File(...)):
         logging.debug("Saved uploaded file to: %s", file_path)
 
         # Convert DOCX to HTML using Spire.Doc (Ensure Spire.Doc is installed and accessible)
-        from spire.doc import Document
-        from spire.doc.common import CssStyleSheetType, FileFormat
-
-        # Create a Document instance
         document = Document()
 
         # Load the DOCX file
@@ -394,15 +391,33 @@ async def upload_docx_v2(file: UploadFile = File(...)):
         document.SaveToFile(html_file_path, FileFormat.Html)
         logging.debug(f"Converted DOCX to HTML: {html_file_path}")
 
+        # Read the HTML file and apply regex to remove the <span> with the warning text
+        with open(html_file_path, 'r', encoding='utf-8') as f:
+            html_content = f.read()
+
+        # Regex pattern to remove both types of evaluation warning spans
+        pattern = r'<span\s+style="[^"]*(font-family:\'Times New Roman\';\s*)?color:#ff0000[^"]*">Evaluation Warning: The document was created with Spire\.Doc for Python\.</span>'
+
+        # Remove the matching pattern from the HTML content
+        html_content = re.sub(pattern, '', html_content)
+
+        # Logging the result
+        logging.debug("Removed evaluation warning span from HTML.")
+                # Save the modified HTML back to the file
+        with open(html_file_path, 'w', encoding='utf-8') as f:
+            f.write(html_content)
+        
+        logging.debug(f"Modified HTML file saved at: {html_file_path}")
+
         # Dispose of the document object to release resources
         document.Dispose()
 
-        # Send the HTML file back as a download
+        # Send the modified HTML file back as a download
         return FileResponse(
             path=html_file_path,
             media_type="text/html",
             filename=os.path.basename(html_file_path),
-            headers={"Content-Disposition": "attachment; filename=" + os.path.basename(html_file_path)}
+            headers={"Content-Disposition": f"attachment; filename={os.path.basename(html_file_path)}"}
         )
 
     except Exception as e:
