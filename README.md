@@ -99,7 +99,7 @@ These endpoints are available at `/api/v2/convert/`.
 
 -   **GET `/`**: Base route to check the service is live, returns a welcome message for v2.
 
--   **POST `/upload-docx/`**: Upload a DOCX file and convert it to an HTML file using Spire.Doc.
+-   **POST `/docx2html/`**: POST /upload-docx/: Upload a DOCX file and convert it to an HTML file using Spire.Doc. It is highly recommended to use this endpoint for better and simpler HTML output with proper formatting.
    -  Input: `file` (file) in form data.
    -  Output: HTML file.
 
