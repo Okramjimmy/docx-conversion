@@ -343,7 +343,7 @@ async def root_v2():
     return {"message": "Welcome to the FastAPI file upload and conversion service! (v2)"}
 
 # File upload route under /api/v2/convert/upload-docx/
-@convert_router_v2.post("/upload-docx/")
+@convert_router_v2.post("/docx2html/")
 async def upload_docx_v2(file: UploadFile = File(...)):
     logging.debug("Received file upload request for v2.")
 
