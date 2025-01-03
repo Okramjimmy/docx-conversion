@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    container_name: docx_conversion_server
+    ports:
+      - "7002:7002" # Expose FastAPI on port 7002
+    volumes:
+      - .:/app
+    restart: always
